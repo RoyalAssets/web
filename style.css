@@ -30,10 +30,11 @@ body::before {
 .background-video {
   position: fixed;
   inset: 0;
-  z-index: -2;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .profile {
@@ -117,4 +118,10 @@ body::before {
   nav a {
     transition: none;
   }
+}
+
+.highlight {
+  color: #b9f3ff;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(125, 230, 255, 0.9);
 }

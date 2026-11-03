@@ -1,9 +1,0 @@
-services:
-  web:
-    build:
-      context: .
-    image: royalassets-web:latest
-    container_name: royalassets-web
-    ports:
-      - "8080:80"
-    restart: unless-stopped

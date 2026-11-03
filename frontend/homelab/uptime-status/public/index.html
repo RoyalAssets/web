@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101725">
+  <title>Homelab Status</title>
+  <link rel="stylesheet" href="/status/style.css">
+</head>
+<body>
+  <video class="background-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="/background.mp4" type="video/mp4">
+  </video>
+
+  <main class="status-panel">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">HomeLab</p>
+        <h1>Service status</h1>
+        <p class="subtitle">Live look at the services up.</p>
+      </div>
+      <span class="refresh-indicator"><span class="pulse-dot"></span> Live checks</span>
+    </header>
+
+    <section class="overall-status" id="overall-status" aria-live="polite">
+      <span class="overall-icon" aria-hidden="true">…</span>
+      <div>
+        <strong id="overall-title">Checking services</strong>
+        <p id="overall-detail">Connecting to the status monitor…</p>
+      </div>
+    </section>
+
+    <section class="services-section" aria-labelledby="services-heading">
+      <div class="section-heading">
+        <h2 id="services-heading">Services</h2>
+        <span id="last-checked">Waiting for first check</span>
+      </div>
+      <div class="service-list" id="service-list" aria-live="polite">
+        <p class="loading-message">Loading service status…</p>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>Checks run every 30 seconds</span>
+      <span>History is kept while the monitor is running</span>
+    </footer>
+  </main>
+
+  <script src="/status/app.js" defer></script>
+</body>
+</html>

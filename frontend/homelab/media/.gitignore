@@ -1,0 +1,15 @@
+.env
+/data/*
+!/data/.gitkeep
+/jellyfin/*
+!/jellyfin/.gitkeep
+/jellyseerr/*
+!/jellyseerr/.gitkeep
+/prowlarr/*
+!/prowlarr/.gitkeep
+/qbittorrent/*
+!/qbittorrent/.gitkeep
+/radarr/*
+!/radarr/.gitkeep
+/sonarr/*
+!/sonarr/.gitkeep

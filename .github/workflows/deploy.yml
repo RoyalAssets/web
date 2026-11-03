@@ -1,0 +1,29 @@
+name: Deploy to local Docker
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: local-docker-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # Configure the self-hosted runner on your own computer with the
+    # additional label "local-docker" before enabling this workflow.
+    runs-on: [self-hosted, local-docker]
+    steps:
+      - name: Check out latest main commit
+        uses: actions/checkout@v4
+
+      - name: Build and replace the running container
+        run: docker compose up -d --build --remove-orphans
+
+      - name: Show deployment status
+        run: docker compose ps

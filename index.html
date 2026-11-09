@@ -14,11 +14,13 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <!-- These decorative layers sit behind the page content. -->
     <video class="background-video" autoplay muted loop playsinline aria-hidden="true">
       <source src="default-mode/background.mp4" type="video/mp4">
     </video>
     <div class="shade" aria-hidden="true"></div>
 
+    <!-- JavaScript reads each button's data-mode value when it is clicked. -->
     <nav class="mode-switch" aria-label="Choose a visual mode">
       <button type="button" data-mode="default" aria-pressed="true">Default</button>
       <button type="button" data-mode="dark" aria-pressed="false">Dark</button>
@@ -31,129 +33,74 @@
         <h1 id="name" aria-label="RoyalAssets"><span class="typewriter-text" aria-hidden="true"></span></h1>
         <p class="tagline">Learning, Coding and Testing new stuff</p>
 
+        <!-- External links open in a new tab; the labels help screen-reader users. -->
         <nav class="socials" aria-label="Find RoyalAssets online">
-          <a href="https://discordapp.com/users/671396942571503629" target="_blank" rel="noopener noreferrer" aria-label="Discord" title="Discord"><img src="https://cdn.simpleicons.org/discord/ffffff" alt=""></a>
-          <a href="https://www.roblox.com/users/651428377/profile" target="_blank" rel="noopener noreferrer" aria-label="Roblox" title="Roblox"><img src="https://cdn.simpleicons.org/roblox/ffffff" alt=""></a>
-          <a href="https://namemc.com/profile/Appanage.2" target="_blank" rel="noopener noreferrer" aria-label="Minecraft profile on NameMC" title="NameMC"><img src="minecraft-icon-cutout.png" alt=""></a>
-          <a href="https://github.com/RoyalAssets" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub"><img src="https://cdn.simpleicons.org/github/ffffff" alt=""></a>
+          <a
+            href="https://discordapp.com/users/671396942571503629"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Discord"
+            title="Discord"
+          >
+            <img src="https://cdn.simpleicons.org/discord/ffffff" alt="">
+          </a>
+          <a
+            href="https://www.roblox.com/users/651428377/profile"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Roblox"
+            title="Roblox"
+          >
+            <img src="https://cdn.simpleicons.org/roblox/ffffff" alt="">
+          </a>
+          <a
+            href="https://namemc.com/profile/Appanage.2"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Minecraft profile on NameMC"
+            title="NameMC"
+          >
+            <img src="minecraft-icon-cutout.png" alt="">
+          </a>
+          <a
+            href="https://github.com/RoyalAssets"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <img src="https://cdn.simpleicons.org/github/ffffff" alt="">
+          </a>
         </nav>
 
+        <!-- The browser provides the open/close behavior for this details element. -->
         <details class="about">
           <summary>About me <span aria-hidden="true">+</span></summary>
           <div class="about-copy">
-            <p>I am a 16-year-old IT student in my first year of college studying IT support and in my second year i will be studying networking and programming.</p>
-            <p>In my free time, I Like to do some homelab projects and coding aswell as exploring new technologies and collecting information.</p>
-            <p>I’m currently focusing on learning HTML, CSS. Im learning small things about Rust, Python and c++ in my spare time when i feel like it. I use AI to help with consepts and errors I’m stuck on.</p>
-            <p>I’d like to work as a developer one day. I’m excited to keep gaining experience, take on new projects, and build the skills for a future career.</p>
+            <p>
+              I am a 16-year-old IT student in my first year of college studying IT support
+              and in my second year i will be studying networking and programming.
+            </p>
+            <p>
+              In my free time, I Like to do some homelab projects and coding aswell as
+              exploring new technologies and collecting information.
+            </p>
+            <p>
+              I’m currently focusing on learning HTML, CSS. Im learning small things about
+              Rust, Python and c++ in my spare time when i feel like it. I use AI to help
+              with consepts and errors I’m stuck on.
+            </p>
+            <p>
+              I’d like to work as a developer one day. I’m excited to keep gaining
+              experience, take on new projects, and build the skills for a future career.
+            </p>
           </div>
         </details>
       </section>
     </main>
 
+    <!-- The script changes this audio source when a different mode is selected. -->
     <audio class="music" loop preload="auto" src="default-mode/music.mp3"></audio>
-    <script>
-      const music = document.querySelector('.music');
-      const backgroundVideo = document.querySelector('.background-video');
-      const modeButtons = document.querySelectorAll('[data-mode]');
-      const hero = document.querySelector('.hero');
-      const modes = {
-        default: { video: 'default-mode/background.mp4', music: 'default-mode/music.mp3' },
-        dark: { video: 'dark-mode/darkbg.mp4', music: 'dark-mode/dark.mp3' },
-        light: { video: 'light-mode/light.mp4', music: 'light-mode/lightmusic.mp3' }
-      };
-      let musicEnabled = false;
-      let musicLoadToken = 0;
-      let transitionToken = 0;
-
-      function setMode(mode) {
-        const assets = modes[mode] ? mode : 'default';
-        const shouldResume = musicEnabled;
-        const loadToken = ++musicLoadToken;
-        document.body.dataset.theme = assets;
-        backgroundVideo.src = modes[assets].video;
-        if (shouldResume && !music.paused) music.pause();
-        music.src = modes[assets].music;
-        backgroundVideo.load();
-        backgroundVideo.play().catch(() => {});
-        if (shouldResume) {
-          music.addEventListener('canplay', () => {
-            if (loadToken === musicLoadToken && musicEnabled) {
-              music.play().catch(() => {
-                musicEnabled = false;
-              });
-            }
-          }, { once: true });
-        }
-        music.load();
-        modeButtons.forEach(button => {
-          button.setAttribute('aria-pressed', String(button.dataset.mode === assets));
-        });
-        try { localStorage.setItem('royalassets-mode', assets); } catch (error) {}
-      }
-
-      function changeMode(mode) {
-        const nextMode = modes[mode] ? mode : 'default';
-        if (modeChanging || nextMode === document.body.dataset.theme) return;
-        modeChanging = true;
-        const currentTransition = ++transitionToken;
-        const finish = () => {
-          if (currentTransition !== transitionToken) return;
-          document.body.classList.remove('mode-transitioning');
-          hero.classList.remove('is-sliding-out', 'is-sliding-in');
-          modeChanging = false;
-        };
-        document.body.classList.add('mode-transitioning');
-        hero.classList.add('is-sliding-out');
-        window.setTimeout(() => {
-          if (currentTransition !== transitionToken) return;
-          backgroundVideo.addEventListener('loadeddata', finish, { once: true });
-          setMode(nextMode);
-          hero.classList.remove('is-sliding-out');
-          hero.classList.add('is-sliding-in');
-          requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.remove('is-sliding-in')));
-        }, 300);
-        window.setTimeout(finish, 1300);
-      }
-
-      let modeChanging = false;
-      modeButtons.forEach(button => button.addEventListener('click', () => changeMode(button.dataset.mode)));
-      let savedMode = 'default';
-      try { savedMode = localStorage.getItem('royalassets-mode') || 'default'; } catch (error) {}
-      setMode(savedMode);
-
-      async function startMusic() {
-        if (musicEnabled) return;
-        musicEnabled = true;
-        const playToken = musicLoadToken;
-        try {
-          await music.play();
-        } catch (error) {
-          if (playToken === musicLoadToken) musicEnabled = false;
-        }
-      }
-      startMusic();
-      document.addEventListener('pointerdown', startMusic, { once: true });
-      document.addEventListener('keydown', startMusic, { once: true });
-
-      const name = 'RoyalAssets';
-      const typewriterText = document.querySelector('.typewriter-text');
-      function typeName(index = 0) {
-        if (index <= name.length) {
-          typewriterText.textContent = name.slice(0, index);
-          window.setTimeout(() => typeName(index + 1), index === name.length ? 2300 : 165);
-          return;
-        }
-        eraseName(name.length);
-      }
-      function eraseName(index) {
-        if (index >= 0) {
-          typewriterText.textContent = name.slice(0, index);
-          window.setTimeout(() => eraseName(index - 1), index === 0 ? 650 : 125);
-          return;
-        }
-        typeName();
-      }
-      typeName();
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
